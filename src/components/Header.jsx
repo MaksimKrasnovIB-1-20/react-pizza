@@ -9,11 +9,6 @@ const Header = () => {
 
   const { totalPrice, totalCount } = useSelector(({ cart }) => cart)
 
-  // const { totalPrice, itemsCount } = useSelector(({ cart }) => ({
-  //   totalPrice: cart.totalPrice,
-  //   itemsCount: cart.itemsCount
-  // }))
-
   return (
     <div className="header">
       <div className="container">
@@ -22,7 +17,7 @@ const Header = () => {
             <img width="38" src={pizza_logo} alt="Pizza logo" />
             <div>
               <h1>React Pizza</h1>
-              <p>самая вкусная пицца во вселенной</p>
+              <p>Самая реактивная пицца во вселенной 🚀</p>
             </div>
           </div>
         </Link>

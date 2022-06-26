@@ -2,8 +2,8 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom';
 
-import { CartItem } from "../components";
-import { clearCart } from "../redux/actions/cart";
+import { CartItem, Button } from "../components";
+import { removeCartItem, plusCartItem, minusCartItem, clearCart } from "../redux/actions/cart";
 
 import cartEmptyImage from '../assets/img/empty-cart.png'
 
@@ -16,10 +16,28 @@ const Cart = () => {
     return items[key].items[0]
   })
 
+  const onRemoveItem = (id) => {
+    if (window.confirm('Вы действительно хотите удалить?')) {
+      dispatch(removeCartItem(id))
+    }
+  }
+
+  const onPlusItem = (id) => {
+    dispatch(plusCartItem(id))
+  }
+
+  const onMinusItem = (id) => {
+    dispatch(minusCartItem(id))
+  }
+
   const onClearCart = () => {
     if (window.confirm('Вы действительно хотите очистить корзину?')) {
       dispatch(clearCart())
     }
+  }
+
+  const onClickOrder = () => {
+    console.log('ВАШ ЗАКАЗ', items)
   }
 
   return (
@@ -61,11 +79,16 @@ const Cart = () => {
               {
                 addedPizzas.map(obj => (
                   <CartItem
+                    key={obj.id}
+                    id={obj.id}
                     name={obj.name}
                     type={obj.type}
                     size={obj.size}
                     totalPrice={items[obj.id].totalPrice}
                     totalCount={items[obj.id].items.length}
+                    onRemove={onRemoveItem}
+                    onPlus={onPlusItem}
+                    onMinus={onMinusItem}
                   />
                 ))
               }
@@ -87,9 +110,11 @@ const Cart = () => {
                   </svg>
                   <span>Вернуться назад</span>
                 </Link>
-                <div className="button pay-btn">
+                <Button
+                  onClick={onClickOrder}
+                  className="pay-btn">
                   <span>Оплатить сейчас</span>
-                </div>
+                </Button>
               </div>
             </div>
           </div>

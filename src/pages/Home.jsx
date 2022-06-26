@@ -9,9 +9,9 @@ import { addCartItem } from '../redux/actions/cart';
 
 const categoryNames = ['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']
 const sortItems = [
-  { name: 'популярности', type: 'popular', order: 'desc' },
-  { name: 'цене', type: 'price', order: 'desc' },
-  { name: 'алфавиту', type: 'name', order: 'asc' },
+  { name: 'популярности ⭐', type: 'popular', order: 'desc' },
+  { name: 'цене 💸', type: 'price', order: 'desc' },
+  { name: 'алфавиту 🔤', type: 'name', order: 'asc' }
 ]
 
 const Home = () => {
@@ -37,13 +37,6 @@ const Home = () => {
   const onAddPizzaToCart = (obj) => {
     dispatch(addCartItem(obj))
   }
-
-  // const addPizzaToCart = (obj) => {
-  //   dispatch({
-  //     type: 'ADD_PIZZA_CART',
-  //     payload: obj,
-  //   })
-  // }
 
   return (
     <div className="container">

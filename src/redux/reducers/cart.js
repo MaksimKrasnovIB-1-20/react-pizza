@@ -4,9 +4,38 @@ const initialState = {
   totalCount: 0
 }
 
-const getTotalPrice = arr => arr.reduce((sum, obj) => obj.price + sum, 0)
+const getTotalPrice = (arr) => arr.reduce((sum, obj) => obj.price + sum, 0)
 
-function cart(state = initialState, action) {
+const _get = (obj, path) => {
+  const [firstKey, ...keys] = path.split('.')
+  return keys.reduce((val, key) => {
+    return val[key]
+  }, obj[firstKey])
+}
+
+const getTotalSum = (obj, path) => {
+  return Object.values(obj).reduce((sum, obj) => {
+    const value = _get(obj, path)
+    return sum + value
+  }, 0)
+}
+
+// const getTotalSum = (obj, key) => {
+//   const [firstKey, ...keys] = key.split('.')
+//   return Object.keys(obj).reduce((sum, key) => {
+//     const value = keys.reduce((val, key) => {
+//       if (typeof val[key] === 'object') {
+//         return val[key]
+//       } else {
+//         return val
+//       }
+//     }, obj[firstKey])
+//     return sum + value
+//   }, 0
+//   )
+// }
+
+const cart = (state = initialState, action) => {
   switch (action.type) {
     case 'ADD_CART_ITEM': {
       const currentItems = !state.items[action.payload.id]
@@ -21,15 +50,78 @@ function cart(state = initialState, action) {
         }
       }
 
-      const items = Object.values(newItems).map(obj => obj.items)
-      const allItems = [].concat.apply([], items)
-      const totalPrice = getTotalPrice(allItems)
+      const totalCount = getTotalSum(newItems, 'items.length')
+      const totalPrice = getTotalSum(newItems, 'totalPrice')
 
       return {
         ...state,
         items: newItems,
-        totalCount: allItems.length,
+        totalCount,
         totalPrice
+      }
+    }
+
+    case 'REMOVE_CART_ITEM': {
+      const newItems = {
+        ...state.items,
+
+      }
+      const currentTotalPrice = newItems[action.payload].totalPrice
+      const currentTotalCount = newItems[action.payload].items.length
+      delete newItems[action.payload]
+
+      return {
+        ...state,
+        items: newItems,
+        totalPrice: state.totalPrice - currentTotalPrice,
+        totalCount: state.totalCount - currentTotalCount
+      }
+    }
+
+    case 'PLUS_CART_ITEM': {
+      const newObjItems = [
+        ...state.items[action.payload].items,
+        state.items[action.payload].items[0],
+      ]
+
+      const newItems = {
+        ...state.items,
+        [action.payload]: {
+          items: newObjItems,
+          totalPrice: getTotalPrice(newObjItems),
+        }
+      }
+
+      const totalCount = getTotalSum(newItems, 'items.length')
+      const totalPrice = getTotalSum(newItems, 'totalPrice')
+
+      return {
+        ...state,
+        items: newItems,
+        totalCount,
+        totalPrice,
+      }
+    }
+
+    case 'MINUS_CART_ITEM': {
+      const oldItems = state.items[action.payload].items
+      const newObjItems = oldItems.length > 1 ? state.items[action.payload].items.slice(1) : oldItems
+      const newItems = {
+        ...state.items,
+        [action.payload]: {
+          items: newObjItems,
+          totalPrice: getTotalPrice(newObjItems),
+        }
+      }
+
+      const totalCount = getTotalSum(newItems, 'items.length');
+      const totalPrice = getTotalSum(newItems, 'totalPrice');
+
+      return {
+        ...state,
+        items: newItems,
+        totalCount,
+        totalPrice,
       }
     }
 
@@ -40,34 +132,9 @@ function cart(state = initialState, action) {
         totalCount: 0
       }
 
-    case 'REMOVE_CART_ITEM':
-      return {
-        items: {},
-        totalPrice: 0,
-        totalCount: 0
-      }
-
     default:
       return state
   }
 }
-
-// function cart(state = initialState, action) {
-//   switch (action.type) {
-//     case 'ADD_PIZZA_CART':
-//       return {
-//         ...state,
-//         items: {
-//           ...state.items,
-//           [action.payload.id]: !state.items[action.payload.id]
-//             ? [action.payload]
-//             : [...state.items[action.payload.id], action.payload]
-//         }
-//       }
-//     default:
-//       return state
-
-//   }
-// }
 
 export default cart

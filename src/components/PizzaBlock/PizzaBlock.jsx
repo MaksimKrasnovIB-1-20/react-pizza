@@ -9,7 +9,7 @@ const PizzaBlock = ({ id, name, imageUrl, price, types, sizes, onClickAddPizza, 
   const availableTypes = ['тонкое', 'традиционное']
 
   const [activeType, setActiveType] = React.useState(types[0])
-  // const [activeSize, setActiveSize] = React.useState(0)
+  // const [activeSize, setActiveSize] = React.useState(sizes[0])
   const [activeSize, setActiveSize] = React.useState(0)
 
   const onSelectType = (index) => {
@@ -42,18 +42,6 @@ const PizzaBlock = ({ id, name, imageUrl, price, types, sizes, onClickAddPizza, 
       <h4 className="pizza-block__title">{name}</h4>
       <div className="pizza-block__selector">
         <ul>
-          {/* {
-            availableTypes.map((type, index) => (
-              <li
-                key={type}
-                onClick={() => onSelectType(index)}
-                className={classNames({
-                  'active': activeType === index,
-                  'disabled': !types.includes(index)
-                })}>
-                {type}
-              </li>))
-          } */}
           {
             availableTypes.map((type, index) => (
               <li
@@ -69,18 +57,6 @@ const PizzaBlock = ({ id, name, imageUrl, price, types, sizes, onClickAddPizza, 
           }
         </ul>
         <ul>
-          {/* {
-            availableSizes.map((size, index) => (
-              <li
-                key={size}
-                onClick={() => onSelectSize(size)}
-                className={classNames({
-                  'active': activeSize === size,
-                  'disabled': !sizes.includes(size)
-                })}>
-                {size} см.
-              </li>))
-          } */}
           {
             availableSizes.map((size, index) => (
               <li
@@ -125,8 +101,6 @@ PizzaBlock.propTypes = {
   imageUrl: PropTypes.string.isRequired,
   types: PropTypes.arrayOf(PropTypes.number.isRequired),
   sizes: PropTypes.arrayOf(PropTypes.number.isRequired),
-  // types: PropTypes.arrayOf(PropTypes.number).isRequired,
-  // sizes: PropTypes.arrayOf(PropTypes.number).isRequired,
   price: PropTypes.number.isRequired,
   onAddPizza: PropTypes.func,
   cartCount: PropTypes.number
