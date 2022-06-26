@@ -7,7 +7,7 @@ import { Home, Cart } from './pages';
 const App = () => {
 
   // window.test = () => {
-  //   dispatch(fetchPizzas())
+  //   dispatch(fetchItems())
   // }
 
   return (
